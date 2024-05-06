@@ -1,6 +1,6 @@
 use crate::error::Result;
-use crate::op::{BinOp, UnOp};
-use crate::parse::{Parse, ParseStream};
+// use crate::parser::{Parse, ParseStream};
+use crate::{ast_enum, Token};
 use proc_macro2::TokenStream;
 use quote::ToTokens;
 
@@ -147,9 +147,7 @@ impl Parse for BinOp {
 impl Parse for UnOp {
     fn parse(input: ParseStream) -> Result<Self> {
         let lookahead = input.lookahead1();
-        if lookahead.peek(Token![*]) {
-            input.parse().map(UnOp::Deref)
-        } else if lookahead.peek(Token![!]) {
+        if lookahead.peek(Token![!]) {
             input.parse().map(UnOp::Not)
         } else if lookahead.peek(Token![-]) {
             input.parse().map(UnOp::Neg)
@@ -199,7 +197,6 @@ impl ToTokens for BinOp {
 impl ToTokens for UnOp {
     fn to_tokens(&self, tokens: &mut TokenStream) {
         match self {
-            UnOp::Deref(t) => t.to_tokens(tokens),
             UnOp::Not(t) => t.to_tokens(tokens),
             UnOp::Neg(t) => t.to_tokens(tokens),
         }
