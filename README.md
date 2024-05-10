@@ -10,7 +10,7 @@ impl Animal:
   fn new(age: @Int, name: @String, paws: @Int) -> Self:
     return Self(age: age, name: name, paws: paws)
   
-  fn birthday(animal: !@This, olderby: @Int) -> Self:
+  fn birthday(animal: mut @This, olderby: @Int) -> Self:
     return animal.age += olderby
     
  trait Barks:
